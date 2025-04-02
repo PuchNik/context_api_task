@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-export const useRequestPost = (setIsUpdating) => {
+export const useRequestPost = () => {
   const [taskValue, setTaskValue] = useState('')
   const [errorMessage, setErrorMessage] = useState('')
 
@@ -26,11 +26,10 @@ export const useRequestPost = (setIsUpdating) => {
         completed: false,
       }),
     })
-        .then((rowResponse) => rowResponse.json())
-        .finally(() => {
-          setTaskValue('')
-          setIsUpdating(false)
-        })
+      .then((rowResponse) => rowResponse.json())
+      .finally(() => {
+        setTaskValue('')
+      })
   }
 
   const handleAddTask = (event) => {

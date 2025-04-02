@@ -1,6 +1,9 @@
 import { useState } from 'react'
+import { useContext } from 'react'
+import { AppContext } from '../../../context'
 
-export const useRequestPut = (setIsUpdating) => {
+export const useRequestPut = () => {
+  const { notes, setNotes } = useContext(AppContext)
   const [idTaskModified, setIdTaskModified] = useState(null)
   const [editTaskValue, setEditTaskValue] = useState('')
 
@@ -28,7 +31,7 @@ export const useRequestPut = (setIsUpdating) => {
       .finally(() => {
         setIdTaskModified(null)
         setEditTaskValue('')
-        setIsUpdating(false)
+        setNotes(notes)
       })
   }
 

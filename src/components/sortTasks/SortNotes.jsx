@@ -1,11 +1,17 @@
-export const SortNotes = (notes, setNotes) => {
+import { useContext } from 'react'
+import { AppContext } from '../../../context'
 
-    const sortedNotes = () => {
-        const sortedTasks = [...notes].sort((a, b) => a.title.localeCompare(b.title))
-        setNotes(sortedTasks)
-    }
+export const SortNotes = () => {
+  const { notes, setNotes } = useContext(AppContext)
 
-    return {
-        sortedNotes,
-    }
+  const sortedNotes = () => {
+    const sortedTasks = [...notes].sort((a, b) =>
+      a.title.localeCompare(b.title)
+    )
+    setNotes(sortedTasks)
+  }
+
+  return {
+    sortedNotes,
+  }
 }

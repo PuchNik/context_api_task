@@ -1,6 +1,10 @@
 import { useState } from 'react'
+import { useContext } from 'react'
+import { AppContext } from '../../../context'
 
-export const SearchNote = (notes) => {
+export const SearchNote = () => {
+  const { notes } = useContext(AppContext)
+
   const [searchValue, setSearchValue] = useState('')
 
   const handleSearchNote = (event) => {
