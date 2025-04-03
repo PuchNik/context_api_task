@@ -1,18 +1,23 @@
-import { useEffect } from 'react'
-import { useContext } from 'react'
-import { AppContext } from '../../../context'
+import {useEffect, useState} from 'react'
+import {useContext} from 'react'
+import {AppContext} from '../../../context'
 
 export const useRequestGet = () => {
-  const { notes, setNotes } = useContext(AppContext)
+    const {setNotes} = useContext(AppContext)
+    const [isLoading, setIsLoading] = useState(false)
 
-  useEffect(() => {
-    fetch('http://localhost:3000/notes')
-      .then((loadedData) => loadedData.json())
-      .then((taskData) => setNotes(taskData))
-  }, [notes, setNotes])
+    useEffect(() => {
+        setIsLoading(true)
+        fetch('http://localhost:3000/notes')
+            .then((loadedData) => loadedData.json())
+            .then((taskData) => setNotes(taskData))
 
-  return {
-    notes,
-    setNotes,
-  }
+            .finally(() => {
+                setIsLoading(false)
+            })
+    }, [setNotes])
+
+    return {
+        isLoading
+    }
 }

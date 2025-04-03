@@ -1,51 +1,58 @@
-import { useState } from 'react'
+import {useState} from 'react'
+import {useContext} from 'react'
+import {AppContext} from '../../../context'
 
 export const useRequestPost = () => {
-  const [taskValue, setTaskValue] = useState('')
-  const [errorMessage, setErrorMessage] = useState('')
+    const {setNotes} = useContext(AppContext)
+    const [taskValue, setTaskValue] = useState('')
+    const [errorMessage, setErrorMessage] = useState('')
 
-  const handleInputChange = (event) => {
-    setTaskValue(event.target.value)
-    setErrorMessage('')
-  }
-
-  const templateForAddingTask = () => {
-    if (!taskValue) {
-      setErrorMessage('Невозможно добавить пустую задачу')
-      setTimeout(() => {
+    const handleInputChange = (event) => {
+        setTaskValue(event.target.value)
         setErrorMessage('')
-      }, 2500)
-      return
     }
 
-    fetch('http://localhost:3000/notes', {
-      method: 'POST',
-      headers: { 'Content-type': 'application/json; charset=utf-8' },
-      body: JSON.stringify({
-        title: taskValue.charAt(0).toUpperCase() + taskValue.slice(1),
-        completed: false,
-      }),
-    })
-      .then((rowResponse) => rowResponse.json())
-      .finally(() => {
-        setTaskValue('')
-      })
-  }
+    const templateForAddingTask = () => {
+        if (!taskValue) {
+            setErrorMessage('Невозможно добавить пустую задачу')
+            setTimeout(() => {
+                setErrorMessage('')
+            }, 2500)
+            return
+        }
 
-  const handleAddTask = (event) => {
-    event.preventDefault()
-    templateForAddingTask()
-  }
+        fetch('http://localhost:3000/notes', {
+            method: 'POST',
+            headers: {'Content-type': 'application/json; charset=utf-8'},
+            body: JSON.stringify({
+                title: taskValue.charAt(0).toUpperCase() + taskValue.slice(1),
+                completed: false,
+            }),
+        })
+            .then((rowResponse) => rowResponse.json())
+            .then((newNote) => {
+                setNotes((prevNotes) => [...prevNotes, newNote])
+            })
 
-  const addNewTask = () => {
-    templateForAddingTask()
-  }
+            .finally(() => {
+                setTaskValue('')
+            })
+    }
 
-  return {
-    addNewTask,
-    taskValue,
-    handleInputChange,
-    handleAddTask,
-    errorMessage,
-  }
+    const handleAddTask = (event) => {
+        event.preventDefault()
+        templateForAddingTask()
+    }
+
+    const addNewTask = () => {
+        templateForAddingTask()
+    }
+
+    return {
+        addNewTask,
+        taskValue,
+        handleInputChange,
+        handleAddTask,
+        errorMessage,
+    }
 }
