@@ -1,16 +1,18 @@
-import './App.css';
-import { useState } from 'react';
-import MainPage from './components/MainPage/MainPage';
-import { AppContext } from '../context.js';
+import './App.css'
+import { useState } from 'react'
+import MainPage from './pages/mainPage/MainPage.jsx'
+import { AppContext } from '../context.js'
+
 
 function App() {
-    const [notes, setNotes] = useState([]);
+  // Состояние для хранения заметок и функция для их обновления
+  const [notes, setNotes] = useState([])
 
-    return (
-        <AppContext.Provider value={{ notes, setNotes }}>
-            <MainPage />
-        </AppContext.Provider>
-    );
+  return (
+    <AppContext.Provider value={{ notes, setNotes }}>
+      <MainPage />
+    </AppContext.Provider>
+  )
 }
 
-export default App;
+export default App

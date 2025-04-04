@@ -1,53 +1,58 @@
-import {useState} from 'react'
-import {useContext} from 'react'
-import {AppContext} from '../../../context'
+import { useState } from 'react'
+import { useContext } from 'react'
+import { AppContext } from '../../../context'
 
+
+// Custom hook - обновление(редактирование) заметки
 export const useRequestPut = () => {
-    const {setNotes} = useContext(AppContext)
-    const [idTaskModified, setIdTaskModified] = useState(null)
-    const [editTaskValue, setEditTaskValue] = useState('')
+  const { setNotes } = useContext(AppContext)
+  const [idNoteModified, setIdNoteModified] = useState(null)
+  const [editNoteValue, setEditNoteValue] = useState('')
 
-    const editTask = (id, title) => {
-        setIdTaskModified(id)
-        setEditTaskValue(title)
-    }
+  // Инициализация редактирования заметки
+  const editNote = (id, title) => {
+    setIdNoteModified(id)
+    setEditNoteValue(title)
+  }
 
-    const handleEditChange = (event) => {
-        setEditTaskValue(event.target.value)
-    }
+  // Обработка изменения ввода редактируемой заметки
+  const handleEditChange = (event) => {
+    setEditNoteValue(event.target.value)
+  }
 
-    const handleEditTask = (event) => {
-        event.preventDefault()
+  // Обработка события редактирования заметки
+  const handleEditNote = (event) => {
+    event.preventDefault()
 
-        fetch(`http://localhost:3000/notes/${idTaskModified}`, {
-            method: 'PUT',
-            headers: {'Content-type': 'applications/json; charset=utf-8'},
-            body: JSON.stringify({
-                title: editTaskValue,
-                completed: false,
-            }),
-        })
-            .then((rowResponse) => rowResponse.json())
-            .then((updatedNote) => {
-                setNotes((prevNotes) =>
-                    prevNotes.map((note) =>
-                        note.id === idTaskModified ? updatedNote : note
-                    )
-                );
-            })
+    fetch(`http://localhost:3000/notes/${idNoteModified}`, {
+      method: 'PUT',
+      headers: { 'Content-type': 'applications/json; charset=utf-8' },
+      body: JSON.stringify({
+        title: editNoteValue,
+        completed: false,
+      }),
+    })
+      .then((rowResponse) => rowResponse.json())
+      .then((updatedNote) => {
+        setNotes((prevNotes) =>
+          prevNotes.map((note) =>
+            note.id === idNoteModified ? updatedNote : note
+          )
+        )
+      })
 
-            .finally(() => {
-                setIdTaskModified(null)
-                setEditTaskValue('')
-            })
-    }
+      .finally(() => {
+        setIdNoteModified(null)
+        setEditNoteValue('')
+      })
+  }
 
-    return {
-        editTask,
-        idTaskModified,
-        setIdTaskModified,
-        handleEditChange,
-        editTaskValue,
-        handleEditTask,
-    }
+  return {
+    editNote,
+    idNoteModified,
+    setIdNoteModified,
+    handleEditChange,
+    editNoteValue,
+    handleEditNote,
+  }
 }
