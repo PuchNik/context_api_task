@@ -1,12 +1,52 @@
-# React + Vite
+# README
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Описание проекта
 
-Currently, two official plugins are available:
+Данное приложение представляет собой переработанный список дел, который использует JSON Server для управления данными. Программа реализует все необходимые функции для удобного управления задачами, включая создание, чтение, обновление и удаление (CRUD) дел.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Функциональные возможности
 
-## Expanding the ESLint configuration
+- **Инициализация списка дел**: Приложение начинается с пустого массива, что позволяет пользователю добавлять свои задачи с нуля.
+  
+- **CRUD-операции**: Пользователи могут добавлять новые дела, редактировать существующие и удалять их по мере необходимости. Все операции выполняются с использованием JSON Server, что обеспечивает быструю и надежную работу с данными.
 
-If you are developing a production application, we recommend using TypeScript and enable type-aware lint rules. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- **Поиск дел**: Реализована функция поиска, которая позволяет находить дела по заданной фразе. Если введенная фраза совпадает с фрагментом текста дела, соответствующее дело будет отображено в результатах поиска.
+
+- **Сортировка дел**: В приложении предусмотрена кнопка для включения режима сортировки дел по алфавиту. Если кнопка не нажата, дела отображаются в изначальном порядке, что позволяет пользователю выбирать удобный для него способ отображения задач.
+
+## Технологии
+
+- **React**: Используется для построения пользовательского интерфейса.
+- **JSON Server**: Применяется для создания фейкового REST API, что позволяет легко управлять данными.
+- **React Context**: Применен для управления состоянием приложения, что упрощает передачу данных между компонентами.
+
+## Установка и запуск
+
+1. Клонируйте репозиторий:
+   ```bash
+   git clone <URL_репозитория>
+   ```
+
+2. Перейдите в директорию проекта:
+   ```bash
+   cd <имя_папки_проекта>
+   ```
+
+3. Установите зависимости:
+   ```bash
+   npm install
+   ```
+
+4. Запустите JSON Server:
+   ```bash
+   json-server --watch db.json
+   ```
+
+5. Запустите приложение:
+   ```bash
+   npm start
+   ```
+
+## Заключение
+
+Данное приложение предоставляет пользователям удобный и интуитивно понятный интерфейс для управления списком дел. Все функции реализованы с учетом современных подходов к разработке на React, что делает его простым в использовании и расширении.
