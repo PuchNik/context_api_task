@@ -1,25 +1,25 @@
 import { useEffect, useState } from 'react'
+import { useContext } from 'react'
+import { AppContext } from '../../../context'
 
-export const useRequestGet = ({ isUpdating, setIsUpdating }) => {
-  const [notes, setNotes] = useState([])
+
+// Custom hook - получение заметок
+export const useRequestGet = () => {
+  const { setNotes } = useContext(AppContext)
   const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
     setIsLoading(true)
-    setIsUpdating(true)
-
     fetch('http://localhost:3000/notes')
       .then((loadedData) => loadedData.json())
-      .then((taskData) => setNotes(taskData))
+      .then((noteData) => setNotes(noteData))
 
       .finally(() => {
         setIsLoading(false)
       })
-  }, [isUpdating])
+  }, [setNotes])
 
   return {
     isLoading,
-    notes,
-    setNotes
   }
 }

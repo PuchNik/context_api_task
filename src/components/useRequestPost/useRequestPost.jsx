@@ -1,16 +1,23 @@
 import { useState } from 'react'
+import { useContext } from 'react'
+import { AppContext } from '../../../context'
 
-export const useRequestPost = (setIsUpdating) => {
-  const [taskValue, setTaskValue] = useState('')
+
+// Custom hook - добавление заметок
+export const useRequestPost = () => {
+  const { setNotes } = useContext(AppContext)
+  const [noteValue, setNoteValue] = useState('')
   const [errorMessage, setErrorMessage] = useState('')
 
+  // Обработка изменения ввода заметки
   const handleInputChange = (event) => {
-    setTaskValue(event.target.value)
+    setNoteValue(event.target.value)
     setErrorMessage('')
   }
 
-  const templateForAddingTask = () => {
-    if (!taskValue) {
+  //  Добавление заметки (общая)
+  const templateForAddingNote = () => {
+    if (!noteValue) {
       setErrorMessage('Невозможно добавить пустую задачу')
       setTimeout(() => {
         setErrorMessage('')
@@ -18,35 +25,41 @@ export const useRequestPost = (setIsUpdating) => {
       return
     }
 
+    // Отправка запроса на добавление заметки
     fetch('http://localhost:3000/notes', {
       method: 'POST',
       headers: { 'Content-type': 'application/json; charset=utf-8' },
       body: JSON.stringify({
-        title: taskValue.charAt(0).toUpperCase() + taskValue.slice(1),
+        title: noteValue.charAt(0).toUpperCase() + noteValue.slice(1),
         completed: false,
       }),
     })
-        .then((rowResponse) => rowResponse.json())
-        .finally(() => {
-          setTaskValue('')
-          setIsUpdating(false)
-        })
+      .then((rowResponse) => rowResponse.json())
+      .then((newNote) => {
+        setNotes((prevNotes) => [...prevNotes, newNote])
+      })
+
+      .finally(() => {
+        setNoteValue('')
+      })
   }
 
-  const handleAddTask = (event) => {
+  // Обработка события - добавление заметки
+  const handleAddNote = (event) => {
     event.preventDefault()
-    templateForAddingTask()
+    templateForAddingNote()
   }
 
-  const addNewTask = () => {
-    templateForAddingTask()
+  // Добавление новой заметки
+  const addNewNote = () => {
+    templateForAddingNote()
   }
 
   return {
-    addNewTask,
-    taskValue,
+    addNewNote,
+    noteValue,
     handleInputChange,
-    handleAddTask,
+    handleAddNote,
     errorMessage,
   }
 }

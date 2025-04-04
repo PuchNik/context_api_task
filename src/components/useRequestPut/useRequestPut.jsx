@@ -1,43 +1,58 @@
 import { useState } from 'react'
+import { useContext } from 'react'
+import { AppContext } from '../../../context'
 
-export const useRequestPut = (setIsUpdating) => {
-  const [idTaskModified, setIdTaskModified] = useState(null)
-  const [editTaskValue, setEditTaskValue] = useState('')
 
-  const editTask = (id, title) => {
-    setIdTaskModified(id)
-    setEditTaskValue(title)
+// Custom hook - обновление(редактирование) заметки
+export const useRequestPut = () => {
+  const { setNotes } = useContext(AppContext)
+  const [idNoteModified, setIdNoteModified] = useState(null)
+  const [editNoteValue, setEditNoteValue] = useState('')
+
+  // Инициализация редактирования заметки
+  const editNote = (id, title) => {
+    setIdNoteModified(id)
+    setEditNoteValue(title)
   }
 
+  // Обработка изменения ввода редактируемой заметки
   const handleEditChange = (event) => {
-    setEditTaskValue(event.target.value)
+    setEditNoteValue(event.target.value)
   }
 
-  const handleEditTask = (event) => {
+  // Обработка события редактирования заметки
+  const handleEditNote = (event) => {
     event.preventDefault()
 
-    fetch(`http://localhost:3000/notes/${idTaskModified}`, {
+    fetch(`http://localhost:3000/notes/${idNoteModified}`, {
       method: 'PUT',
       headers: { 'Content-type': 'applications/json; charset=utf-8' },
       body: JSON.stringify({
-        title: editTaskValue,
+        title: editNoteValue,
         completed: false,
       }),
     })
       .then((rowResponse) => rowResponse.json())
+      .then((updatedNote) => {
+        setNotes((prevNotes) =>
+          prevNotes.map((note) =>
+            note.id === idNoteModified ? updatedNote : note
+          )
+        )
+      })
+
       .finally(() => {
-        setIdTaskModified(null)
-        setEditTaskValue('')
-        setIsUpdating(false)
+        setIdNoteModified(null)
+        setEditNoteValue('')
       })
   }
 
   return {
-    editTask,
-    idTaskModified,
-    setIdTaskModified,
+    editNote,
+    idNoteModified,
+    setIdNoteModified,
     handleEditChange,
-    editTaskValue,
-    handleEditTask,
+    editNoteValue,
+    handleEditNote,
   }
 }
